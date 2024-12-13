@@ -10,10 +10,8 @@ import unicodedata
 # Load environment variables
 load_dotenv()
 
-# Initialize OpenAI client
-client = openai(
-    api_key=os.environ.get("OPENAI_API_KEY"),
-)
+# Set OpenAI API key
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 # Normalize text to handle unsupported characters
 def normalize_text(text):
@@ -23,7 +21,7 @@ def normalize_text(text):
 def extract_key_scene(story_text):
     """
     Extract a visually interesting part of the story for illustration.
-    For simplicity, we use the first visually descriptive sentence. Eliana, is a SeaWing-SandWing hybrid dragonet.
+    For simplicity, we use the first visually descriptive sentence. Eliana is a SeaWing-SandWing hybrid dragonet.
     """
     sentences = story_text.split(". ")
     for sentence in sentences:
@@ -52,11 +50,11 @@ if st.button("Generate Story"):
         """
         try:
             # Generate story
-            chat_completion = client.chat.completions.create(
+            chat_completion = openai.ChatCompletion.create(
                 messages=[{"role": "user", "content": story_prompt}],
                 model="gpt-4",
             )
-            story = chat_completion.choices[0].message.content
+            story = chat_completion["choices"][0]["message"]["content"]
 
             st.subheader("Your Story:")
             st.write(story)
@@ -66,20 +64,20 @@ if st.button("Generate Story"):
 
             # Update the image generation prompt
             image_prompt = f"""
-            Create a illustration of the following scene:
+            Create an illustration of the following scene:
             {key_scene}
-            The style should be playful, imaginative, and age-appropriate for children. The style of illustration should be simple like a saturday morning children's cartoon. '
+            The style should be playful, imaginative, and age-appropriate for children, resembling a Saturday morning cartoon.
             """
 
             # Generate illustration
-            image_response = client.images.generate(
+            image_response = openai.Image.create(
                 prompt=image_prompt,
                 n=1,
                 size="512x512",
             )
 
             # Access the URL of the generated image
-            image_url = image_response.data[0].url
+            image_url = image_response["data"][0]["url"]
 
             # Display illustration
             st.image(image_url, caption=f"Illustration of: {key_scene}")
@@ -118,7 +116,7 @@ if story and image_url:
 
     # Save the PDF to a BytesIO object
     pdf_file = BytesIO()
-    pdf_content = pdf.output(dest="S").encode("latin1")  # Get PDF content as a string
+    pdf_content = pdf.output(dest="S").encode("latin-1")  # Get PDF content as a string
     pdf_file.write(pdf_content)  # Write content to BytesIO
     pdf_file.seek(0)  # Move the file pointer to the beginning
 
