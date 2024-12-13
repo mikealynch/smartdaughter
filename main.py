@@ -30,10 +30,10 @@ def extract_key_scene(story_text):
     return sentences[0].strip() + "."  # Default to the first sentence if no keywords are found
 
 # Title and Introduction
-st.title("SmartDaughter Story Generator by MIKEALYNCH")
+st.title("SmartDaughter Story Generator")
 st.markdown("""
-Welcome to the **SmartDaughter Story Generator**! Here, you'll embark on amazing adventures with Eliana, 
-the brave SeaWing-SandWing hybrid dragonet. Click the button below to generate a unique story and illustration!
+Welcome to the **SmartDaughter Story Generator**. Click the button below to generate a story and illustration about Eliana, 
+the SeaWing-SandWing hybrid dragonet
 """)
 
 # Initialize variables for story and image
