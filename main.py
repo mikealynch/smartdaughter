@@ -42,7 +42,7 @@ st.title("SmartDaughter Story Generator by MIKEALYNCH")
 st.markdown("""
 Welcome to the **SmartDaughter Story Generator**! Click one of the buttons below to generate a unique story and illustration:
 - **Dragon Story**: Generate a story about Eliana, the SeaWing-SandWing hybrid dragonet.
-- **Wildcard Story**: Generate a fun story based on Eliana's adventure with random characters, places, and situations.
+- **Wildcard Story**: Generate a story about Eliana's adventure with random characters, places, and situations.
 """)
 
 # Initialize variables for story and image
