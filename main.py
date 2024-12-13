@@ -27,7 +27,7 @@ def extract_key_scene(story_text):
     return sentences[0].strip() + "."
 
 # Wildcard Story Random Choices
-people = ["a curious young scientist", "a squishmallow, "a brave knight", "Gengar"]
+people = ["a curious young scientist", "a squishmallow, "a brave knight", "a gengar"]
 places = ["an enchanted forest", "a futuristic city", "a magical castle", "a mysterious island"]
 situations = ["discovering a hidden treasure", "solving a puzzling mystery", "making an unexpected friend", "saving the day from disaster"]
 
