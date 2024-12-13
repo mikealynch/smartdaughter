@@ -89,7 +89,6 @@ if st.button("Dragon Story"):
         except Exception as e:
             st.error(f"An error occurred: {e}")
 
-# Wildcard Story Button
 if st.button("Wildcard Story"):
     with st.spinner("Generating your Wildcard Story and illustration..."):
         story_prompt = generate_wildcard_prompt()
@@ -104,10 +103,14 @@ if st.button("Wildcard Story"):
             st.subheader("Your Wildcard Story:")
             st.write(story)
 
+            # Summarize the story for the illustration prompt
+            def summarize_story_for_image(story_text):
+                return story_text[:500]  # Truncate to the first 500 characters
+
             # Generate illustration
             image_prompt = f"""
             Create an illustration of a scene from the following story:
-            {story}
+            {summarize_story_for_image(story)}
             The style should be playful, imaginative, and age-appropriate for children, resembling a Saturday morning cartoon.
             """
             image_response = openai.Image.create(
@@ -122,6 +125,7 @@ if st.button("Wildcard Story"):
 
         except Exception as e:
             st.error(f"An error occurred: {e}")
+
 
 # Generate PDF
 if story and image_url:
