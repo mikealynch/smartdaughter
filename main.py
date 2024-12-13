@@ -35,10 +35,10 @@ def generate_wildcard_prompt():
     person = random.choice(people)
     place = random.choice(places)
     situation = random.choice(situations)
-    return f"Write a short, adventurous story for a 9-year-old about Eliana, and her adventures with {person} in {place}, who is {situation}. The story should be imaginative, exciting, and age-appropriate."
+    return f"Write a short, adventurous story for a 9-year-old about Eliana, and her adventures with {person} in {place}, who is {situation}. The story should be imaginative, exciting, and age-appropriate. Eliana has brown eyes and long brown hair and she loves science and adventure."
 
 # Title and Introduction
-st.title("SmartDaughter Story Generator by MIKEALYNCH")
+st.title("SmartDaughter Story Generator")
 st.markdown("""
 Welcome to the **SmartDaughter Story Generator**! Click one of the buttons below to generate a unique story and illustration:
 - **Dragon Story**: Generate a story about Eliana, the SeaWing-SandWing hybrid dragonet.
