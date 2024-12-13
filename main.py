@@ -1,7 +1,7 @@
 import streamlit as st
 from dotenv import load_dotenv
 import os
-from openai import OpenAI
+import openai
 from fpdf import FPDF
 import requests
 from io import BytesIO
