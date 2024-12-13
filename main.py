@@ -37,7 +37,7 @@ def generate_wildcard_prompt():
     person = random.choice(people)
     place = random.choice(places)
     situation = random.choice(situations)
-    return f"Write a short, adventurous story for a 9-year-old about Eliana, and her adventures with {person} in {place}, who is {situation}. The story should be imaginative, exciting, and age-appropriate. Eliana has brown eyes and long brown hair and she loves science and adventure."
+    return f"Write a short, adventurous story for a 9-year-old about Eliana, and her adventures with {person} in {place}, who is {situation}. The story should be imaginative, exciting, and age-appropriate."
 
 # Generate an image using Replicate's Stable Diffusion
 def generate_image(prompt):
@@ -120,7 +120,7 @@ if st.button("Wildcard Story"):
                 return story_text[:500]  # Truncate to the first 500 characters
 
             # Generate illustration
-            image_prompt = f"A playful, imaginative children's illustration of: {summarize_story_for_image(story)}"
+            image_prompt = f"A simple illustration of this story it should be drawn in the style of a children's cartoon if you illustrate eliana she should have long brown hair and brown eyes: {summarize_story_for_image(story)}"
             image_url = generate_image(image_prompt)
 
             # Display illustration
