@@ -11,7 +11,7 @@ import unicodedata
 load_dotenv()
 
 # Initialize OpenAI client
-client = OpenAI(
+client = openai(
     api_key=os.environ.get("OPENAI_API_KEY"),
 )
 
