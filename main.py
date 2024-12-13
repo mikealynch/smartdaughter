@@ -20,24 +20,25 @@ replicate.api_token = os.getenv("REPLICATE_API_TOKEN")
 def normalize_text(text):
     return unicodedata.normalize("NFKD", text).encode("latin-1", "replace").decode("latin-1")
 
-# Extract an interesting part of the story for the illustration
-def extract_key_scene(story_text):
-    sentences = story_text.split(". ")
-    for sentence in sentences:
-        if any(keyword in sentence.lower() for keyword in ["cave", "underwater", "shimmer", "adventure"]):
-            return sentence.strip() + "."
-    return sentences[0].strip() + "."
+# Summarize the story using OpenAI
+def summarize_story_with_ai(story_text):
+    """
+    Generate a concise summary of the story using OpenAI.
+    The summary is limited to 500 characters for use in the image prompt.
+    """
+    prompt = f"Summarize the following story in 500 characters or less:\n\n{story_text}"
+    try:
+        response = openai.ChatCompletion.create(
+            messages=[{"role": "user", "content": prompt}],
+            model="gpt-4",
+        )
+        summary = response["choices"][0]["message"]["content"]
+        st.write(summary.strip())
 
-# Wildcard Story Random Choices
-people = ["a curious young scientist", "a friendly squishmallow", "a brave knight", "a mischevious gengar"]
-places = ["an enchanted forest", "a futuristic city", "a magical castle", "a mysterious island"]
-situations = ["discovering a hidden treasure", "solving a puzzling mystery", "making an unexpected friend", "saving the day from disaster"]
-
-def generate_wildcard_prompt():
-    person = random.choice(people)
-    place = random.choice(places)
-    situation = random.choice(situations)
-    return f"Write a short, adventurous story for a 9-year-old about Eliana, and her adventures with {person} in {place}, who is {situation}. The story should be imaginative, exciting, and age-appropriate."
+        return summary.strip()
+        
+    except Exception as e:
+        raise Exception(f"Error summarizing story: {e}")
 
 # Generate an image using Replicate's Stable Diffusion
 def generate_image(prompt):
@@ -57,6 +58,17 @@ def generate_image(prompt):
         return output[0]  # Return the URL of the generated image
     except Exception as e:
         raise Exception(f"Error generating image: {e}")
+
+# Wildcard Story Random Choices
+people = ["a curious young scientist", "a friendly squishmallow", "a brave knight", "a mischievous gengar"]
+places = ["an enchanted forest", "a futuristic city", "a magical castle", "a mysterious island"]
+situations = ["discovering a hidden treasure", "solving a puzzling mystery", "making an unexpected friend", "saving the day from disaster"]
+
+def generate_wildcard_prompt():
+    person = random.choice(people)
+    place = random.choice(places)
+    situation = random.choice(situations)
+    return f"Write a short, adventurous story for a 9-year-old about Eliana, and her adventures with {person} in {place}, who is {situation}. The story should be imaginative, exciting, and age-appropriate. Eliana has brown eyes and long brown hair and she loves science and adventure."
 
 # Title and Introduction
 st.title("SmartDaughter Story Generator")
@@ -88,15 +100,15 @@ if st.button("Dragon Story"):
             st.subheader("Your Dragon Story:")
             st.write(story)
 
-            # Extract an interesting part of the story for the illustration
-            key_scene = extract_key_scene(story)
+            # Summarize the story for the illustration
+            summary = summarize_story_with_ai(story)
 
             # Generate illustration
-            image_prompt = f"A colorful illustration of: {key_scene}. The style should be playful, imaginative, and age-appropriate for children."
+            image_prompt = f"A playful, imaginative children's illustration of: {summary}."
             image_url = generate_image(image_prompt)
 
             # Display illustration
-            st.image(image_url, caption=f"Illustration of: {key_scene}")
+            st.image(image_url, caption=f"Illustration of: {summary}")
 
         except Exception as e:
             st.error(f"An error occurred: {e}")
@@ -115,12 +127,11 @@ if st.button("Wildcard Story"):
             st.subheader("Your Wildcard Story:")
             st.write(story)
 
-            # Summarize the story for the illustration prompt
-            def summarize_story_for_image(story_text):
-                return story_text[:500]  # Truncate to the first 500 characters
+            # Summarize the story for the illustration
+            summary = summarize_story_with_ai(story)
 
             # Generate illustration
-            image_prompt = f"A simple illustration of this story it should be drawn in the style of a children's cartoon if you illustrate eliana she should have long brown hair and brown eyes: {summarize_story_for_image(story)}"
+            image_prompt = f"A colorful children's storybook illustration of: {summary}."
             image_url = generate_image(image_prompt)
 
             # Display illustration
