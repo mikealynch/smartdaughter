@@ -26,7 +26,7 @@ def summarize_story_with_ai(story_text):
     Generate a concise summary of the story using OpenAI.
     The summary is limited to 500 characters for use in the image prompt.
     """
-    prompt = f"Summarize the following story in 500 characters or less:\n\n{story_text}"
+    prompt = f"Select an important scene from this story and summarize it in 200 characters or less being very descriptive. The summary will be used to cerate an illustration:\n\n{story_text}"
     try:
         response = openai.ChatCompletion.create(
             messages=[{"role": "user", "content": prompt}],
@@ -131,7 +131,7 @@ if st.button("Wildcard Story"):
             summary = summarize_story_with_ai(story)
 
             # Generate illustration
-            image_prompt = f"A colorful children's storybook illustration of: {summary}."
+            image_prompt = f"A colorful children's storybook illustration of: {summary}. Elina is a 9 year old girl from Boston with brown hair and brown eyes. Her favorite color is orange."
             image_url = generate_image(image_prompt)
 
             # Display illustration
