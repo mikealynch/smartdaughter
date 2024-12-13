@@ -33,7 +33,6 @@ def summarize_story_with_ai(story_text):
             model="gpt-4",
         )
         summary = response["choices"][0]["message"]["content"]
-        st.write(summary.strip())
 
         return summary.strip()
         
@@ -49,10 +48,10 @@ def generate_image(prompt):
                 "width": 512,
                 "height": 512,
                 "prompt": prompt,
-                "scheduler": "K_EULER",
+                "scheduler": "Euler",
                 "num_outputs": 1,
-                "guidance_scale": 7.5,
-                "num_inference_steps": 50,
+                "guidance_scale": 10,
+                "num_inference_steps": 75,
             }
         )
         return output[0]  # Return the URL of the generated image
@@ -131,11 +130,11 @@ if st.button("Wildcard Story"):
             summary = summarize_story_with_ai(story)
 
             # Generate illustration
-            image_prompt = f"A colorful children's storybook illustration of: {summary}. Elina is a 9 year old girl from Boston with brown hair and brown eyes. Her favorite color is orange."
+            image_prompt = f"A illustration of: {summary}. The illustration should look like it was made with colored pencils.  Elina is a 9 year old girl from Boston with brown hair and brown eyes. Her favorite color is orange."
             image_url = generate_image(image_prompt)
 
             # Display illustration
-            st.image(image_url, caption="Illustration from Wildcard Story")
+            st.image(image_url, caption=summary)
 
         except Exception as e:
             st.error(f"An error occurred: {e}")
