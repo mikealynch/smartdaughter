@@ -2,6 +2,7 @@ import streamlit as st
 from dotenv import load_dotenv
 import os
 import openai
+import replicate
 from fpdf import FPDF
 import requests
 from io import BytesIO
@@ -11,8 +12,9 @@ import random
 # Load environment variables
 load_dotenv()
 
-# Set OpenAI API key
-openai.api_key = os.environ.get("OPENAI_API_KEY")
+# Set API keys
+openai.api_key = os.getenv("OPENAI_API_KEY")
+replicate.api_token = os.getenv("REPLICATE_API_TOKEN")
 
 # Normalize text to handle unsupported characters
 def normalize_text(text):
@@ -36,6 +38,25 @@ def generate_wildcard_prompt():
     place = random.choice(places)
     situation = random.choice(situations)
     return f"Write a short, adventurous story for a 9-year-old about Eliana, and her adventures with {person} in {place}, who is {situation}. The story should be imaginative, exciting, and age-appropriate. Eliana has brown eyes and long brown hair and she loves science and adventure."
+
+# Generate an image using Replicate's Stable Diffusion
+def generate_image(prompt):
+    try:
+        output = replicate.run(
+            "stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4",
+            input={
+                "width": 512,
+                "height": 512,
+                "prompt": prompt,
+                "scheduler": "K_EULER",
+                "num_outputs": 1,
+                "guidance_scale": 7.5,
+                "num_inference_steps": 50,
+            }
+        )
+        return output[0]  # Return the URL of the generated image
+    except Exception as e:
+        raise Exception(f"Error generating image: {e}")
 
 # Title and Introduction
 st.title("SmartDaughter Story Generator")
@@ -71,17 +92,8 @@ if st.button("Dragon Story"):
             key_scene = extract_key_scene(story)
 
             # Generate illustration
-            image_prompt = f"""
-            Create an illustration of the following scene:
-            {key_scene}
-            The style should be playful, imaginative, and age-appropriate for children, resembling a Saturday morning cartoon.
-            """
-            image_response = openai.Image.create(
-                prompt=image_prompt,
-                n=1,
-                size="512x512",
-            )
-            image_url = image_response["data"][0]["url"]
+            image_prompt = f"A colorful illustration of: {key_scene}. The style should be playful, imaginative, and age-appropriate for children."
+            image_url = generate_image(image_prompt)
 
             # Display illustration
             st.image(image_url, caption=f"Illustration of: {key_scene}")
@@ -108,24 +120,14 @@ if st.button("Wildcard Story"):
                 return story_text[:500]  # Truncate to the first 500 characters
 
             # Generate illustration
-            image_prompt = f"""
-            Create an illustration of a scene from the following story:
-            {summarize_story_for_image(story)}
-            The style should be playful, imaginative, and age-appropriate for children, resembling a Saturday morning cartoon.
-            """
-            image_response = openai.Image.create(
-                prompt=image_prompt,
-                n=1,
-                size="512x512",
-            )
-            image_url = image_response["data"][0]["url"]
+            image_prompt = f"A playful, imaginative children's illustration of: {summarize_story_for_image(story)}"
+            image_url = generate_image(image_prompt)
 
             # Display illustration
             st.image(image_url, caption="Illustration from Wildcard Story")
 
         except Exception as e:
             st.error(f"An error occurred: {e}")
-
 
 # Generate PDF
 if story and image_url:
