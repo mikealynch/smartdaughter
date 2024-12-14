@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Dec 14 12:06:14 2024
+
+@author: MIke Lynch
+"""
 import streamlit as st
 from dotenv import load_dotenv
 import os
@@ -26,7 +32,7 @@ def summarize_story_with_ai(story_text):
     Generate a concise summary of the story using OpenAI.
     The summary is limited to 500 characters for use in the image prompt.
     """
-    prompt = f"Select an important scene from this story and summarize it in 200 characters or less being very descriptive. The summary will be used to cerate an illustration:\n\n{story_text}"
+    prompt = f"Select an important scene from this story and describe it in 200 characters or less. Use descriptive language optimized for Stable Diffusion:\n\n{story_text}"
     try:
         response = openai.ChatCompletion.create(
             messages=[{"role": "user", "content": prompt}],
@@ -67,7 +73,7 @@ def generate_wildcard_prompt():
     person = random.choice(people)
     place = random.choice(places)
     situation = random.choice(situations)
-    return f"Write a short, adventurous story for a 9-year-old about Eliana, and her adventures with {person} in {place}, who is {situation}. The story should be imaginative, exciting, and age-appropriate. Eliana has brown eyes and long brown hair and she loves science and adventure."
+    return f"Write a short, adventurous story for a 9-year-old about Eliana, and her adventures with {person} in {place}, who is {situation}. The story should be imaginative, exciting, and age-appropriate."
 
 # Title and Introduction
 st.title("SmartDaughter Story Generator")
