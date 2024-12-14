@@ -34,7 +34,7 @@ def summarize_story_with_ai(story_text):
     """
     prompt = (
     f"Select the most visually impactful scene from this story and describe it in 200 characters or less. "
-    f"Focus on a single subject or interaction, using detailed, descriptive visual language. "
+    f"Focus on a single subject, using detailed, descriptive visual language. "
     f"Mention the size, color, shape, and arrangement of objects in the scene. Include clear context, such as lighting, mood, and environment, and use terms optimized for Stable Diffusion "
     f"(e.g., vibrant, whimsical, glowing). The description should guide Stable Diffusion to create a highly detailed and visually appealing image:\n\n{story_text}"
 )
@@ -141,7 +141,7 @@ if st.button("Wildcard Story"):
             summary = summarize_story_with_ai(story)
 
             # Generate illustration
-            image_prompt = f"A playful 2D cartoon-style illustration of: {summary}. Elina is a 9 year old girl with brown hair and brown eyes."
+            image_prompt = f"A playful 2D cartoon-style illustration of: {summary}."
             image_url = generate_image(image_prompt)
 
             # Display illustration
