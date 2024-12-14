@@ -32,7 +32,12 @@ def summarize_story_with_ai(story_text):
     Generate a concise summary of the story using OpenAI.
     The summary is limited to 500 characters for use in the image prompt.
     """
-    prompt = f"Select an important scene from this story and describe it in 200 characters or less. Use descriptive visual language describing the size, color, and shape of all objects in the scene. The language should be optimized for Stable Diffusion which will be used to render an image based on teh summary you provide:\n\n{story_text}"
+    prompt = (
+    f"Select the most visually impactful scene from this story and describe it in 200 characters or less. "
+    f"Focus on a single subject or interaction, using detailed, descriptive visual language. "
+    f"Mention the size, color, shape, and arrangement of objects in the scene. Include clear context, such as lighting, mood, and environment, and use terms optimized for Stable Diffusion "
+    f"(e.g., vibrant, whimsical, glowing). The description should guide Stable Diffusion to create a highly detailed and visually appealing image:\n\n{story_text}"
+)
     try:
         response = openai.ChatCompletion.create(
             messages=[{"role": "user", "content": prompt}],
@@ -136,7 +141,7 @@ if st.button("Wildcard Story"):
             summary = summarize_story_with_ai(story)
 
             # Generate illustration
-            image_prompt = f"A illustration of: {summary}. The illustration should look like it was made with colored pencils.  Elina is a 9 year old girl from Boston with brown hair and brown eyes. Her favorite color is orange."
+            image_prompt = f"A playful 2D cartoon-style illustration of: {summary}. Elina is a 9 year old girl with brown hair and brown eyes."
             image_url = generate_image(image_prompt)
 
             # Display illustration
