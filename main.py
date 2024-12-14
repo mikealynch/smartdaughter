@@ -32,7 +32,7 @@ def summarize_story_with_ai(story_text):
     Generate a concise summary of the story using OpenAI.
     The summary is limited to 500 characters for use in the image prompt.
     """
-    prompt = f"Select an important scene from this story and describe it in 200 characters or less. Use descriptive language optimized for Stable Diffusion:\n\n{story_text}"
+    prompt = f"Select an important scene from this story and describe it in 200 characters or less. Use descriptive visual language describing the size, color, and shape of all objects in the scene. The language should be optimized for Stable Diffusion which will be used to render an image based on teh summary you provide:\n\n{story_text}"
     try:
         response = openai.ChatCompletion.create(
             messages=[{"role": "user", "content": prompt}],
